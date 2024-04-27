@@ -55,6 +55,17 @@ vector<string> matriks= {
 "Majusnsajausjsnbsbsns"
 }; 
 
+for(const auto& kata : kata) { 
+if (mencariKata(matriks,kata)){ 
+cout<<"Ada"<<endl; 
+}else{ 
+cout<<"Tidak Ada"<<endl; 
+} 
+} 
+
+return 0; 
+} 
+
 
     
 
