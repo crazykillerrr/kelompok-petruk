@@ -35,7 +35,17 @@ bool mencariKata(vector<string>& matriks, string data){
         }
     } 
     return false;
-}
+} 
+
+int main(){  
+int N; 
+cin >> N; 
+
+vector<string> kata(N); 
+for(int x=0; x<N; ++x){ 
+cin >> kata[x]; 
+} 
+
 
 
     
