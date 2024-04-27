@@ -46,6 +46,14 @@ for(int x=0; x<N; ++x){
 cin >> kata[x]; 
 } 
 
+vector<string> matriks= { 
+"aafyghkjylshagbamaysnamah", 
+"Fahysnamuanlalahsnskzuhz", 
+"bajyskamaranamalsjudbsmak", 
+
+"Jsusmsjshockeyjajkaiahanajuaha", 
+"Majusnsajausjsnbsbsns"
+}; 
 
 
     
