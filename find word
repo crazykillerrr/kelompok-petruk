@@ -24,7 +24,7 @@ bool mencariKata(vector<string>& matriks, string data){
       }
   }
   for (int x = 0; x < baris; ++x) {
-        for (int y = 0;  < kolom; ++j){
+        for (int y = 0;  < kolom; ++y){
              string strDiagonal = "";
              for (int k = 0; x + k < baris && y + k < kolom; ++k) {
                 strDiagonal += matriks[x + k][y + k];
