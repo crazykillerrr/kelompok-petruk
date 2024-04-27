@@ -4,11 +4,12 @@
 
 using namespace std;
 
-bool mencari kata(vector<string>&matriks string data){
+bool mencariKata(vector<string>& matriks, string data){
 int baris = matriks.size();
 int kolom = matriks[0].size();
+
 for (int x = 0; x < baris; ++x){
-if (matriks[x].find(kata) = string npos){
-return false;
+if (matriks[x].find(kata) != string::npos){
+return true;
 }
 }
