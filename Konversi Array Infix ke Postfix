@@ -1,1 +1,31 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <stack>
+#include <cctype>
+
+using namespace std;
+
+int precedence(char op){
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/' || op == '%') return 2;
+    return 0;
+}
+
+bool isOperator(char c){
+    return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' ;
+}
+
+bool isOperand(const string& token){
+    return isdigit(token[0]) || (token[0] == '-' && token.size() > 1 && isdigit(token[1]));
+}
+
+vector<string> tokenize(const string& input){
+    vector<string> tokens;
+    string operand;
+    bool expectNumber = true;
+
+  for (size_t i = 0; i < input.size(); ++i){
+
+
 
