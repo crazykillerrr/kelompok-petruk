@@ -1,88 +1,131 @@
 #include <iostream>
-#include <stack>
+#include <vector>
 #include <string>
-#include <sstream>
-#include <cctype>
-#include <cmath>
+#include <stack>
+
 using namespace std;
 
-int precedence (char op){
-    if (op =='+' || op =='-') return 1;
-    if (op =='*' || op =='/' || op =='%') return 2;
+vector<string> strToInfix(string& inputString) {
+    vector<string> expression;
+    string num = "";
+    int n = inputString.length();
+
+    for (int i = 0; i < n; ++i) {
+        char current = inputString[i];
+        
+        if ((current >= '0' && current <= '9') || (current == '-' && (i == 0 || inputString[i - 1] == '('))) {
+            num += current;
+            while (i + 1 < n && inputString[i + 1] >= '0' && inputString[i + 1] <= '9') {
+                num += inputString[++i];
+            }
+            expression.push_back(num);
+            num = "";
+        } else if (current == '+' || current == '-' || current == '*' ||
+                   current == '/' || current == '%' || current == '(' || current == ')') {
+            expression.push_back(string(1, current));
+        }
+    }
+    return expression;
+}
+
+vector<string> handleNegative(vector<string>& expression) {
+    vector<string> result;
+    int n = expression.size();
+
+    for (int i = 0; i < n; ++i) {
+        if (expression[i] == "-" && (i == 0 || expression[i - 1] == "(" || 
+                                     expression[i - 1] == "+" || expression[i - 1] == "-" || 
+                                     expression[i - 1] == "*" || expression[i - 1] == "/" || 
+                                     expression[i - 1] == "%")) {
+            result.push_back("-1");
+            result.push_back("*");
+        } else {
+            result.push_back(expression[i]);
+        }
+    }
+
+    return result;
+}
+
+int precedence(string op) {
+    if (op == "+" || op == "-") return 1;
+    if (op == "*" || op == "/" || op == "%") return 2;
     return 0;
 }
 
-int applyOp (int a, int b, char op){
-    switch (op){
-        case'+': return a+b;
-        case'-': return a-b;
-        case'*': return a*b;
-        case'/': return a/b;
-        case'%': return a%b;
-}
-return 0;
+vector<string> infixToPostfix(vector<string>& infix) {
+    vector<string> postfix;
+    stack<string> opStack;
+
+    for (auto& token : infix) {
+        if ((token[0] >= '0' && token[0] <= '9') || (token[0] == '-' && token.length() > 1)) {
+            postfix.push_back(token);
+        } else if (token == "(") {
+            opStack.push(token);
+        } else if (token == ")") {
+            while (!opStack.empty() && opStack.top() != "(") {
+                postfix.push_back(opStack.top());
+                opStack.pop();
+            }
+            opStack.pop(); 
+        } else {
+            while (!opStack.empty() && precedence(opStack.top()) >= precedence(token)) {
+                postfix.push_back(opStack.top());
+                opStack.pop();
+            }
+            opStack.push(token);
+        }
+    }
+
+    while (!opStack.empty()) {
+        postfix.push_back(opStack.top());
+        opStack.pop();
+    }
+
+    return postfix;
 }
 
-string infixToPostfix (const string& exp){
-stack<char>operators;
-string postfix;
-for (int i=0; i<exp.length(); i++){
-    if (isspace(exp[i])) continue;
-    if (isdigit(exp[i])){
-        while (i<exp.length() && (isdigit(exp[i] || exp[i] =='.')){
-               postfix += exp[i++];
-}
-postfix +='';
-i--;
-}else if (exp[i] == '('){
- operators.push(exp[i]);
-}else if (exp[i] == ')'){
- while (!operators.empty() && operators.top() != '('){
-        postfix += operators.top();
-        operators.pop();
-        postfix +='';
-}
-operators.pop();
-}else{
- while (!operators.empty() && precedence (operators.top()) >= precedence(exp[i])){
-       postfix += operators.top();
-       operators.pop();
-       postfix +='';
-} 
-operators.push(exp[i]);
-}
-}
- while (!operators.empty()){
-       postfix += operators.top();
-       operators.pop();
-       postfix +='';
-}
-return postfix;
-)
+double evaluatePostfix(vector<string>& postfix) {
+    stack<double> values;
 
-int evaluatePostfix (const string& exp){
-    stack<int>values;
-    istringstream iss(exp);
-    string token;
-    while (iss >> token){
-         if (isdigit(token[0] || (token[0] == '-' && token.length() >1)){
-         values.push(stoi(token));
-}else{
- int val2 = values.top();
- values.pop();
- int val1 = values.top();
- values.pop();
- values.top(applyOp(val1, val2, token[0]));
-}
-}
-return values.top();
+    for (auto& token : postfix) {
+        if ((token[0] >= '0' && token[0] <= '9') || (token[0] == '-' && token.length() > 1)) {
+            values.push(stod(token));
+        } else {
+            double val2 = values.top();
+            values.pop();
+            double val1 = values.top();
+            values.pop();
+
+            if (token == "+") values.push(val1 + val2);
+            else if (token == "-") values.push(val1 - val2);
+            else if (token == "*") values.push(val1 * val2);
+            else if (token == "/") values.push(val1 / val2);
+            else if (token == "%") values.push((int)val1 % (int)val2);
+        }
+    }
+
+    return values.top();
 }
 
-int main(){
-    string exp;
-    getline(cin, exp);
-    string postfix = infixToPostfix(exp);
-    int result = evaluatePostfix(postfix);
-    cout << result << endl;
+void printExpression(vector<string>& expression) {
+    for (auto& token : expression) {
+        cout << token << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    string inputString;
+    getline(cin, inputString);
+
+    vector<string> expression = strToInfix(inputString);
+    vector<string> finalExpression = handleNegative(expression);
+    vector<string> postfixExpression = infixToPostfix(finalExpression);
+
+
+    double result = evaluatePostfix(postfixExpression);
+    cout <<  result << endl;
+
     return 0;
 }
