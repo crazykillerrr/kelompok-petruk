@@ -1,1 +1,88 @@
+#include <iostream>
+#include <stack>
+#include <string>
+#include <sstream>
+#include <cctype>
+#include <cmath>
+using namespace std;
 
+int precedence (char op){
+    if (op =='+' || op =='-') return 1;
+    if (op =='*' || op =='/' || op =='%') return 2;
+    return 0;
+}
+
+int applyOp (int a, int b, char op){
+    switch (op){
+        case'+': return a+b;
+        case'-': return a-b;
+        case'*': return a*b;
+        case'/': return a/b;
+        case'%': return a%b;
+}
+return 0;
+}
+
+string infixToPostfix (const string& exp){
+stack<char>operators;
+string postfix;
+for (int i=0; i<exp.length(); i++){
+    if (isspace(exp[i])) continue;
+    if (isdigit(exp[i])){
+        while (i<exp.length() && (isdigit(exp[i] || exp[i] =='.')){
+               postfix += exp[i++];
+}
+postfix +='';
+i--;
+}else if (exp[i] == '('){
+ operators.push(exp[i]);
+}else if (exp[i] == ')'){
+ while (!operators.empty() && operators.top() != '('){
+        postfix += operators.top();
+        operators.pop();
+        postfix +='';
+}
+operators.pop();
+}else{
+ while (!operators.empty() && precedence (operators.top()) >= precedence(exp[i])){
+       postfix += operators.top();
+       operators.pop();
+       postfix +='';
+} 
+operators.push(exp[i]);
+}
+}
+ while (!operators.empty()){
+       postfix += operators.top();
+       operators.pop();
+       postfix +='';
+}
+return postfix;
+)
+
+int evaluatePostfix (const string& exp){
+    stack<int>values;
+    istringstream iss(exp);
+    string token;
+    while (iss >> token){
+         if (isdigit(token[0] || (token[0] == '-' && token.length() >1)){
+         values.push(stoi(token));
+}else{
+ int val2 = values.top();
+ values.pop();
+ int val1 = values.top();
+ values.pop();
+ values.top(applyOp(val1, val2, token[0]));
+}
+}
+return values.top();
+}
+
+int main(){
+    string exp;
+    getline(cin, exp);
+    string postfix = infixToPostfix(exp);
+    int result = evaluatePostfix(postfix);
+    cout << result << endl;
+    return 0;
+}
