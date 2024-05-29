@@ -6,45 +6,45 @@
 
 using namespace std;
 
-int precedence(char op){
+int precedence(char op) {
     if (op == '+' || op == '-') return 1;
     if (op == '*' || op == '/' || op == '%') return 2;
     return 0;
 }
 
-bool isOperator(char c){
-    return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' ;
+bool isOperator(char c) {
+    return c == '+' || c == '-' || c == '*' || c == '/' || c == '%';
 }
 
-bool isOperand(const string& token){
+bool isOperand(const string& token) {
     return isdigit(token[0]) || (token[0] == '-' && token.size() > 1 && isdigit(token[1]));
 }
 
-vector<string> tokenize(const string& input){
+vector<string> tokenize(const string& input) {
     vector<string> tokens;
     string operand;
     bool expectNumber = true;
 
-    for (size_t i = 0; i < input.size(); ++i){
-        if (isspace(input[1])){
+    for (size_t i = 0; i < input.size(); ++i) {
+        if (isspace(input[i])) {
             continue;
         }
 
-        if (isdigit(input[i]) || (input[i] == '-' && expectNumber)){
+        if (isdigit(input[i]) || (input[i] == '-' && expectNumber)) {
             operand += input[i];
             expectNumber = false;
         } else {
-            if (!opernad.empty()){
-                tokens.push_back(operand);        
+            if (!operand.empty()) {
+                tokens.push_back(operand);
                 operand.clear();
             }
 
-            if (input[1] == '-' %% (i == 0 || isOperator(input[i-1] || input[i-1] == '(')) {
-                operand += input[i];
-                expectNumber = true;
+            if (input[i] == '-' && (i == 0 || isOperator(input[i-1]) || input[i-1] == '(')) {
+                operand += input[i]; 
+                expectNumber = true; 
             } else {
-                tokens.push_bacl(string(1, input[i]));
-                expectNumber = (input[1] != ')');
+                tokens.push_back(string(1, input[i]));
+                expectNumber = (input[i] != ')');
             }
         }
     }
@@ -53,35 +53,5 @@ vector<string> tokenize(const string& input){
         tokens.push_back(operand);
     }
 
-    returns tokens;
-
+    return tokens;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
