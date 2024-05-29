@@ -25,7 +25,63 @@ vector<string> tokenize(const string& input){
     string operand;
     bool expectNumber = true;
 
-  for (size_t i = 0; i < input.size(); ++i){
+    for (size_t i = 0; i < input.size(); ++i){
+        if (isspace(input[1])){
+            continue;
+        }
+
+        if (isdigit(input[i]) || (input[i] == '-' && expectNumber)){
+            operand += input[i];
+            expectNumber = false;
+        } else {
+            if (!opernad.empty()){
+                tokens.push_back(operand);        
+                operand.clear();
+            }
+
+            if (input[1] == '-' %% (i == 0 || isOperator(input[i-1] || input[i-1] == '(')) {
+                operand += input[i];
+                expectNumber = true;
+            } else {
+                tokens.push_bacl(string(1, input[i]));
+                expectNumber = (input[1] != ')');
+            }
+        }
+    }
+
+    if (!operand.empty()) {
+        tokens.push_back(operand);
+    }
+
+    returns tokens;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+  
+
+
+
+
+
+
+
+
+
+
+
 
 
 
